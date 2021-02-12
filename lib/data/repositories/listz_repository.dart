@@ -4,7 +4,7 @@ import 'package:listz_app/data/models/item_model.dart';
 import 'package:listz_app/data/models/listz_model.dart';
 import 'package:listz_app/data/repositories/repository.dart';
 
-class ListzRepository extends Repository {
+class ListzRepository implements Repository {
   final ListzAPI listzAPI = ListzAPI();
 
   Future<List<ListZ>> getLists() async {

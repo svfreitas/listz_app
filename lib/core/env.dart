@@ -1,1 +1,1 @@
-final String SERVER_URL = 'http://svf.ddns.net:8080';
+final String SERVER_URL = 'http://8ge2e.mocklab.io';

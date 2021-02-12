@@ -24,7 +24,6 @@ class ListzAPI {
     final response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-      //return responseFromJson(response.body);
       return response.body;
     } else {
       throw ServerException();
@@ -38,7 +37,6 @@ class ListzAPI {
     final response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-      //return responseFromJson(response.body);
       return response.body;
     } else {
       throw ServerException();
