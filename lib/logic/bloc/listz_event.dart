@@ -4,8 +4,3 @@ part of 'listz_bloc.dart';
 abstract class ListzEvent {}
 
 class GetLists extends ListzEvent {}
-
-class GetListItems extends ListzEvent {
-  final String listName;
-  GetListItems(this.listName);
-}

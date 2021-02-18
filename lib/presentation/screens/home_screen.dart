@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:listz_app/logic/bloc/items_bloc.dart';
 import 'package:listz_app/logic/bloc/listz_bloc.dart';
 import 'package:listz_app/data/models/item_model.dart';
 import 'package:listz_app/data/models/listz_model.dart';
@@ -11,6 +12,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ListzBloc _listzBloc;
+
+  @override
+  void initState() {
+    _listzBloc = context.read<ListzBloc>();
+    _listzBloc.add(GetLists());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,8 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildInitialInput() {
     return Center(
-      child: ListListzButton(),
-    );
+        // child: ListListzButton(),
+        );
   }
 
   Widget buildLoading() {
@@ -83,8 +93,8 @@ ListTile makeListTile(BuildContext ctx, ListZ list) {
     ]),
     trailing: Icon(Icons.keyboard_arrow_right),
     onTap: () {
-      final listzBloc = ctx.read<ListzBloc>();
-      listzBloc.add(GetListItems(list.name));
+      final ItemsBloc itemsBloc = ctx.read<ItemsBloc>();
+      itemsBloc.add(GetListItems(list.name));
       Navigator.pushNamed(ctx, ItemsScreen.routeName,
           arguments: ItemsScreenArguments(list.name));
     },
@@ -108,6 +118,8 @@ ListView buildListView(BuildContext ctx, List<ListZ> lists) {
 //------------------------------
 
 class ListListzButton extends StatelessWidget {
+  @override
+  ListListzButton() {}
   @override
   Widget build(BuildContext context) {
     return TextButton(

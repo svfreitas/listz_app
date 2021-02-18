@@ -1,9 +1,11 @@
 // Create a Form widget.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:listz_app/data/repositories/listz_repository.dart';
 import 'package:listz_app/logic/bloc/listz_bloc.dart';
 import 'package:listz_app/data/models/item_model.dart';
 import 'package:listz_app/data/models/listz_model.dart';
+import 'package:listz_app/logic/bloc/items_bloc.dart';
 import 'package:listz_app/presentation/screens/items_screen.dart';
 
 class ItemsScreen extends StatefulWidget {
@@ -28,9 +30,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 16),
         alignment: Alignment.center,
-        child: BlocConsumer<ListzBloc, ListzState>(
+        child: BlocConsumer<ItemsBloc, ItemsState>(
           listener: (context, state) {
-            if (state is ListzError) {
+            if (state is ItemsError) {
               Scaffold.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
@@ -39,9 +41,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
             }
           },
           builder: (context, state) {
-            if (state is ListzLoading) {
+            if (state is ItemsLoading) {
               return buildLoading();
-            } else if (state is ListzListItemsLoaded) {
+            } else if (state is ItemsLoaded) {
               return buildItemsListview(context, state.items);
             } else {
               return buildError();
@@ -135,20 +137,6 @@ class ListListzButton extends StatelessWidget {
   void submitGetLists(BuildContext context) {
     final listzBloc = context.read<ListzBloc>();
     listzBloc.add(GetLists());
-  }
-}
-
-class ListListzItemsButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: () => submitGetLists(context),
-        child: Text("Get List Items"));
-  }
-
-  void submitGetLists(BuildContext context) {
-    final listzBloc = context.read<ListzBloc>();
-    listzBloc.add(GetListItems("list1"));
   }
 }
 
