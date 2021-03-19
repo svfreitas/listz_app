@@ -2,18 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:listz_app/data/repositories/listz_repository.dart';
-import 'package:listz_app/logic/bloc/listz/listz_bloc.dart';
 import 'package:listz_app/data/models/item_model.dart';
-import 'package:listz_app/data/models/listz_model.dart';
 import 'package:listz_app/logic/bloc/items/items_bloc.dart';
-import 'package:listz_app/presentation/screens/items_screen.dart';
 
 class ItemsScreen extends StatefulWidget {
   static String routeName = "/items";
-  String _listName;
+  String? _listName;
 
-  ItemsScreen(String list) {
+  ItemsScreen(String? list) {
     this._listName = list;
   }
 
@@ -139,7 +135,7 @@ ListTile makeListItem(Item item) {
     ]),
     //trailing: Icon(Icons.keyboard_arrow_right),
     onTap: () {},
-    subtitle: Column(children: [Text('${item.expireDate.toLocal()}')]),
+    subtitle: Column(children: [Text('${item.expireDate!.toLocal()}')]),
   );
 }
 
@@ -156,7 +152,7 @@ ListView buildItemsListview(BuildContext ctx, List<Item> items) {
 //------------------------------
 
 class ItemsScreenArguments {
-  final String listName;
+  final String? listName;
 
   ItemsScreenArguments(this.listName);
 }

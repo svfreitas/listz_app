@@ -12,8 +12,8 @@ class ResponseAPI {
     this.data,
   });
 
-  String status;
-  String message;
+  String? status;
+  String? message;
   dynamic data;
 
   factory ResponseAPI.fromJson(Map<String, dynamic> json) => ResponseAPI(

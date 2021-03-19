@@ -13,14 +13,14 @@ class ListzRepository implements Repository {
     return List<ListZ>.from(apiParsed.data.map((x) => ListZ.fromJson(x)));
   }
 
-  Future<List<Item>> getListItems(String listName) async {
+  Future<List<Item>> getListItems(String? listName) async {
     String rawData = await listzAPI.getRawListItems(listName);
     var apiParsed = responseFromJson(rawData);
     return List<Item>.from(apiParsed.data.map((x) => Item.fromJson(x)));
   }
 
-  Future<String> login(String username, String password) async {
-    String token = await listzAPI.login(username, password);
+  Future<String?> login(String? username, String? password) async {
+    String? token = await listzAPI.login(username, password);
     return token;
   }
 }

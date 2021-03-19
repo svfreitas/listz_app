@@ -1,14 +1,8 @@
 // Create a Form widget.
 
-import 'dart:convert';
-
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:listz_app/logic/bloc/login/login_bloc.dart';
-import 'package:listz_app/core/env.dart';
-import 'package:listz_app/core/global.dart';
 import 'package:listz_app/presentation/screens/listz_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,10 +16,10 @@ class LoginScreen extends StatefulWidget {
 // This class holds data related to the form.
 class LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  String username;
-  String password;
+  String? username;
+  String? password;
   int _currentIndex = 0;
-  PageController _pageController;
+  late PageController _pageController;
 
   @override
   void initState() {
@@ -91,7 +85,7 @@ class LoginScreenState extends State<LoginScreen> {
 }
 
 Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
-  String username, password;
+  String? username, password;
   return Form(
     key: _formKey,
     child: Container(
@@ -113,7 +107,7 @@ Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
                     hintText: 'Conta',
                   ),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return 'Forneça a conta';
                     }
                     username = value;
@@ -127,7 +121,7 @@ Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
                     icon: Icon(Icons.security_rounded),
                   ),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return 'Forneça a senha';
                     }
                     password = value;
@@ -145,7 +139,7 @@ Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0)),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             LoginBloc loginBloc = context.read<LoginBloc>();
                             loginBloc.add(
                                 LogIn(username: username, password: password));
@@ -160,7 +154,7 @@ Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0)),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             LoginBloc loginBloc = context.read<LoginBloc>();
                             loginBloc.add(
                                 LogIn(username: username, password: password));

@@ -4,11 +4,10 @@ import 'package:listz_app/core/env.dart';
 import 'package:http/http.dart' as http;
 import 'package:listz_app/core/exceptions.dart';
 import 'package:listz_app/core/global.dart';
-import 'package:listz_app/data/repositories/response_API.dart';
 
 class ListzAPI {
   Future<Map<String, String>> _createHeaders() async {
-    String token = await storage.read(key: 'token');
+    String? token = await storage.read(key: 'token');
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -18,10 +17,11 @@ class ListzAPI {
   }
 
   Future<String> getRawLists() async {
-    var url = '$SERVER_URL/restricted/listz';
+    var uri = Uri.http(ServerAddress, '/restricted/listz');
     var headers = await _createHeaders();
 
-    final response = await http.get(url, headers: headers);
+    //final response = await http.get(Uri(scheme: url), headers: headers);
+    final response = await http.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
       return response.body;
@@ -30,11 +30,11 @@ class ListzAPI {
     }
   }
 
-  Future<String> getRawListItems(String listName) async {
-    var url = '$SERVER_URL/restricted/listz/$listName/items';
+  Future<String> getRawListItems(String? listName) async {
+    var uri = Uri.http(ServerAddress, '/restricted/listz/$listName/items');
     var headers = await _createHeaders();
 
-    final response = await http.get(url, headers: headers);
+    final response = await http.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
       return response.body;
@@ -43,13 +43,14 @@ class ListzAPI {
     }
   }
 
-  Future<String> login(String username, String password) async {
-    var url = '$SERVER_URL/login';
+  Future<String?> login(String? username, String? password) async {
+    var uri = Uri.http(ServerAddress, '/login');
+
     var map = new Map<String, dynamic>();
     map['username'] = username;
     map['password'] = password;
 
-    var response = await http.post(url, body: map);
+    var response = await http.post(uri, body: map);
     if (response.statusCode == 200) {
       dynamic b = json.decode(response.body);
       var token = b['token'];

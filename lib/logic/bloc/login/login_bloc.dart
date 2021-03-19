@@ -16,7 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield LoginInitial();
     try {
       if (event is LogIn) {
-        String token = await _repository.login(event.username, event.password);
+        String? token = await _repository.login(event.username, event.password);
         if (token != "") {
           yield LoginSuccess();
         } else {
@@ -26,7 +26,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } on ServerException catch (e) {
       yield LoginFailure(error: "error");
     } catch (err) {
-      yield LoginFailure(error: err.message ?? 'An unknown error occured');
+      String message = err.toString();
+      yield LoginFailure(error: message);
     }
   }
 }

@@ -4,6 +4,6 @@ part of 'items_bloc.dart';
 abstract class ItemsEvent {}
 
 class GetListItems extends ItemsEvent {
-  final String listName;
+  final String? listName;
   GetListItems(this.listName);
 }

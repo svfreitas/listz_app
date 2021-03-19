@@ -9,13 +9,13 @@ class ListZ {
     this.itemCount,
   });
 
-  int id;
-  int userId;
-  String name;
-  String description;
-  int type;
-  DateTime creationDate;
-  int itemCount;
+  int? id;
+  int? userId;
+  String? name;
+  String? description;
+  int? type;
+  DateTime? creationDate;
+  int? itemCount;
 
   factory ListZ.fromJson(Map<String, dynamic> json) => ListZ(
         id: json["id"],
@@ -33,7 +33,7 @@ class ListZ {
         "name": name,
         "description": description,
         "type": type,
-        "creation_date": creationDate.toIso8601String(),
+        "creation_date": creationDate!.toIso8601String(),
         "item_count": itemCount,
       };
 }

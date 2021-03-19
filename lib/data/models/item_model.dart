@@ -13,9 +13,9 @@ class Item {
     this.expireDate,
   });
 
-  int id;
-  String value;
-  DateTime expireDate;
+  int? id;
+  String? value;
+  DateTime? expireDate;
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
         id: json["id"],
@@ -26,6 +26,6 @@ class Item {
   Map<String, dynamic> toJson() => {
         "id": id,
         "value": value,
-        "expire_date": expireDate.toIso8601String(),
+        "expire_date": expireDate!.toIso8601String(),
       };
 }

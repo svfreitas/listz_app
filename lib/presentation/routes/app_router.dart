@@ -4,11 +4,11 @@ import 'package:listz_app/presentation/screens/items_screen.dart';
 import 'package:listz_app/presentation/screens/login_screen.dart';
 
 class AppRouter {
-  Route onGenerateRoute(RouteSettings settings) {
-    ItemsScreenArguments args;
+  Route? onGenerateRoute(RouteSettings settings) {
+    ItemsScreenArguments? args;
 
     if (settings.name == ItemsScreen.routeName) {
-      args = settings.arguments;
+      args = settings.arguments as ItemsScreenArguments?;
     }
 
     switch (settings.name) {
@@ -22,7 +22,7 @@ class AppRouter {
         );
       case '/items':
         return MaterialPageRoute(
-          builder: (_) => ItemsScreen(args.listName),
+          builder: (_) => ItemsScreen(args!.listName),
         );
       default:
         return null;

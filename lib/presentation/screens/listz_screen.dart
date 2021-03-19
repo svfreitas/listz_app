@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:listz_app/logic/bloc/items/items_bloc.dart';
 import 'package:listz_app/logic/bloc/listz/listz_bloc.dart';
-import 'package:listz_app/data/models/item_model.dart';
 import 'package:listz_app/data/models/listz_model.dart';
 import 'package:listz_app/presentation/screens/items_screen.dart';
 
@@ -13,7 +12,7 @@ class ListzScreen extends StatefulWidget {
 }
 
 class _ListzScreenState extends State<ListzScreen> {
-  ListzBloc _listzBloc;
+  late ListzBloc _listzBloc;
 
   @override
   void initState() {
