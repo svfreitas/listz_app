@@ -18,4 +18,9 @@ class ListzRepository implements Repository {
     var apiParsed = responseFromJson(rawData);
     return List<Item>.from(apiParsed.data.map((x) => Item.fromJson(x)));
   }
+
+  Future<String> login(String username, String password) async {
+    String token = await listzAPI.login(username, password);
+    return token;
+  }
 }

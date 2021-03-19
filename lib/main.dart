@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:listz_app/logic/bloc/listz_bloc.dart';
+import 'package:listz_app/logic/bloc/listz/listz_bloc.dart';
 import 'package:listz_app/presentation/routes/app_router.dart';
-import 'package:listz_app/presentation/screens/home_screen.dart';
 
 import 'data/repositories/listz_repository.dart';
-import 'logic/bloc/items_bloc.dart';
+import 'logic/bloc/items/items_bloc.dart';
+import 'logic/bloc/login/login_bloc.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,10 +22,21 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<ItemsBloc>(
             create: (context) => ItemsBloc(_repository),
-          )
+          ),
+          BlocProvider<LoginBloc>(
+            create: (context) => LoginBloc(_repository),
+          ),
         ],
         child: MaterialApp(
-          title: 'Material App',
+          theme: ThemeData.dark().copyWith(
+              primaryColor: Colors.deepPurple,
+              accentColor: Colors.yellow[400],
+              textTheme: ThemeData.dark().textTheme.copyWith(
+                    bodyText2: TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
+          title: 'Listz App',
           onGenerateRoute: _appRouter.onGenerateRoute,
         ));
   }

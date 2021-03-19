@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:listz_app/logic/bloc/items_bloc.dart';
-import 'package:listz_app/logic/bloc/listz_bloc.dart';
+import 'package:listz_app/logic/bloc/items/items_bloc.dart';
+import 'package:listz_app/logic/bloc/listz/listz_bloc.dart';
 import 'package:listz_app/data/models/item_model.dart';
 import 'package:listz_app/data/models/listz_model.dart';
 import 'package:listz_app/presentation/screens/items_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class ListzScreen extends StatefulWidget {
+  static String routeName = "/listz";
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _ListzScreenState createState() => _ListzScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ListzScreenState extends State<ListzScreen> {
   ListzBloc _listzBloc;
 
   @override
@@ -28,7 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text("ListZ"),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("lib/presentation/images/wallpaper-galaxy.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
         alignment: Alignment.center,
         child: BlocConsumer<ListzBloc, ListzState>(
           listener: (context, state) {
@@ -53,13 +59,31 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        currentIndex: 1,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              title: Text("Conta"), icon: Icon(Icons.account_box)),
+          BottomNavigationBarItem(
+              title: Text(
+                "Listas",
+                // style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              icon: Icon(Icons.apps)),
+          BottomNavigationBarItem(
+              title: Text(
+                "Configuração",
+                //        style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              icon: Icon(Icons.settings)),
+        ],
+      ),
     );
   }
 
   Widget buildInitialInput() {
-    return Center(
-        // child: ListListzButton(),
-        );
+    return Center();
   }
 
   Widget buildLoading() {
@@ -70,28 +94,43 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 //------------------------------
-Card makeCard(BuildContext ctx, ListZ list) {
+Widget makeCard(BuildContext ctx, ListZ list) {
   return Card(
-    color: Colors.blue[50],
-    shadowColor: Colors.blue[250],
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15.0),
-    ),
-    elevation: 8.0,
-    margin: new EdgeInsets.fromLTRB(16, 16, 16, 0),
-    child: Container(
-      child: makeListTile(ctx, list),
-    ),
+    color: Colors.transparent,
+    child: makeListTile(ctx, list),
   );
 }
 
 ListTile makeListTile(BuildContext ctx, ListZ list) {
   return ListTile(
-    title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text('${list.name}'),
-      Text('${list.itemCount}'),
-    ]),
-    trailing: Icon(Icons.keyboard_arrow_right),
+    title: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          '${list.name}',
+          style: TextStyle(
+            fontSize: 15,
+          ),
+        ),
+        Container(
+          width: 40.0,
+          height: 40.0,
+          decoration: new BoxDecoration(
+            color: Theme.of(ctx).primaryColor,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              '${list.itemCount}',
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
     onTap: () {
       final ItemsBloc itemsBloc = ctx.read<ItemsBloc>();
       itemsBloc.add(GetListItems(list.name));
@@ -100,7 +139,7 @@ ListTile makeListTile(BuildContext ctx, ListZ list) {
     },
     subtitle: Column(children: [
       Text(' ${list.description}'),
-      Text('${list.creationDate.toLocal()}')
+      // Text('${list.creationDate.toLocal()}')
     ]),
   );
 }

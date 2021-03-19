@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:listz_app/presentation/screens/home_screen.dart';
+import 'package:listz_app/presentation/screens/listz_screen.dart';
 import 'package:listz_app/presentation/screens/items_screen.dart';
 import 'package:listz_app/presentation/screens/login_screen.dart';
 
@@ -12,11 +12,11 @@ class AppRouter {
     }
 
     switch (settings.name) {
-      case '/':
+      case '/listz':
         return MaterialPageRoute(
-          builder: (_) => HomeScreen(),
+          builder: (_) => ListzScreen(),
         );
-      case '/login':
+      case '/':
         return MaterialPageRoute(
           builder: (_) => LoginScreen(),
         );

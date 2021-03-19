@@ -1,11 +1,12 @@
 // Create a Form widget.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:listz_app/data/repositories/listz_repository.dart';
-import 'package:listz_app/logic/bloc/listz_bloc.dart';
+import 'package:listz_app/logic/bloc/listz/listz_bloc.dart';
 import 'package:listz_app/data/models/item_model.dart';
 import 'package:listz_app/data/models/listz_model.dart';
-import 'package:listz_app/logic/bloc/items_bloc.dart';
+import 'package:listz_app/logic/bloc/items/items_bloc.dart';
 import 'package:listz_app/presentation/screens/items_screen.dart';
 
 class ItemsScreen extends StatefulWidget {
@@ -23,12 +24,20 @@ class ItemsScreen extends StatefulWidget {
 class _ItemsScreenState extends State<ItemsScreen> {
   @override
   Widget build(BuildContext context) {
+    // final bloc = BlocProvider.of<ItemsBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Weather Search"),
+        title: Text("Itens da lista"),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("lib/presentation/images/wallpaper-galaxy.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        // padding: EdgeInsets.symmetric(vertical: 16),
         alignment: Alignment.center,
         child: BlocConsumer<ItemsBloc, ItemsState>(
           listener: (context, state) {
@@ -51,6 +60,24 @@ class _ItemsScreenState extends State<ItemsScreen> {
           },
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        currentIndex: 1,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              title: Text("Conta"), icon: Icon(Icons.account_box)),
+          BottomNavigationBarItem(
+              title: Text(
+                "Listas",
+              ),
+              icon: Icon(Icons.apps)),
+          BottomNavigationBarItem(
+              title: Text(
+                "Configuração",
+              ),
+              icon: Icon(Icons.settings)),
+        ],
+      ),
     );
   }
 
@@ -68,26 +95,47 @@ class _ItemsScreenState extends State<ItemsScreen> {
 }
 
 //------------------------------
-Card makeCard(Item item) {
+Widget makeCard(Item item, BuildContext context) {
   return Card(
-    color: Colors.blue[50],
-    shadowColor: Colors.blue[250],
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15.0),
-    ),
-    elevation: 8.0,
-    margin: new EdgeInsets.fromLTRB(16, 16, 16, 0),
-    child: Container(
-      //decoration: BoxDecoration(color: Colors.blue[50]),
-      child: makeListItems(item),
+    color: Colors.transparent,
+    //   color: Colors.white,
+    //   border: Border.all(
+    //    color: Theme.of(context).accentColor,
+    //   width: 0.5,
+    //    ),
+    child: Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
+      child: makeListItem(item),
+      actions: <Widget>[
+        IconSlideAction(
+          caption: 'Archive',
+          color: Colors.blue,
+          icon: Icons.archive,
+          onTap: () => {},
+        ),
+      ],
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Delete',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () => {showAlertDialog2(context)},
+        ),
+      ],
     ),
   );
 }
 
-ListTile makeListItems(Item item) {
+ListTile makeListItem(Item item) {
   return ListTile(
     title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text('${item.value}'),
+      Text(
+        '${item.value}',
+        style: TextStyle(
+          fontSize: 15,
+        ),
+      ),
     ]),
     //trailing: Icon(Icons.keyboard_arrow_right),
     onTap: () {},
@@ -100,45 +148,12 @@ ListView buildItemsListview(BuildContext ctx, List<Item> items) {
     itemCount: items.length,
     itemBuilder: (context, index) {
       Item item = items[index];
-      return makeCard(item);
+      return makeCard(item, context);
     },
   );
 }
 
 //------------------------------
-
-Column buildColumnWithData2(List<Item> items) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: <Widget>[
-      Text(
-        items.toString(),
-        style: TextStyle(
-          fontSize: 40,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      Text(
-        // Display the temperature with 1 decimal place
-        "${items.length}",
-        style: TextStyle(fontSize: 80),
-      ),
-    ],
-  );
-}
-
-class ListListzButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: () => submitGetLists(context), child: Text("Get Lists"));
-  }
-
-  void submitGetLists(BuildContext context) {
-    final listzBloc = context.read<ListzBloc>();
-    listzBloc.add(GetLists());
-  }
-}
 
 class ItemsScreenArguments {
   final String listName;
@@ -146,106 +161,37 @@ class ItemsScreenArguments {
   ItemsScreenArguments(this.listName);
 }
 
-/*
+showAlertDialog2(BuildContext context) {
+  Widget cancelaButton = FlatButton(
+    child: Text("Cancelar"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:listz_app/data/models/item_model.dart';
-import 'package:listz_app/data/models/listz_model.dart';
+  Widget continuaButton = FlatButton(
+    child: Text("Continar"),
+    onPressed: () {
+      Navigator.of(context).pop();
+      //DeleteItem
+    },
+  );
 
-class ItemsScreen extends StatefulWidget {
+  //configura o AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Alerta"),
+    content: Text("Deseja realmente apagar o item?"),
+    actions: [
+      cancelaButton,
+      continuaButton,
+    ],
+  );
 
-  ListZ list;
-
-  ItemsScreen(list) {
-    this.list = list;
-  }
-  @override
-  ItemsScreenState createState() {
-    return ItemsScreenState(list);
-  }
+  //exibe o diálogo
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
-
-class ItemsScreenState extends State<ItemsScreen> {
-  List<Item> items;
-  ListZ list;
-
-  ItemsScreenState(list) {
-    this.list = list;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(this.list.name),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add_circle),
-            onPressed: () {},
-          )
-        ],
-      ),
-      body: FutureBuilder<List<Item>>(
-        future: getItemsFromAPI(http.Client(), this.list.name),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          return snapshot.hasData
-              ? ListOfItems(listOfItems: snapshot.data, context: context)
-              : Center(child: CircularProgressIndicator());
-        },
-      ),
-    );
-  }
-}
-
-
-
-class ListOfItems extends StatelessWidget {
-  final List<Item> listOfItems;
-  final BuildContext context;
-
-  ListOfItems({Key key, this.listOfItems, this.context}) : super(key: key);
-
-  Card makeCard(Item item) {
-    return Card(
-      color: Colors.blue[50],
-      shadowColor: Colors.blue[250],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      elevation: 8.0,
-      margin: new EdgeInsets.fromLTRB(16, 16, 16, 0),
-      child: Container(
-        //decoration: BoxDecoration(color: Colors.blue[50]),
-        child: makeListItems(item),
-      ),
-    );
-  }
-
-  ListTile makeListItems(Item item) {
-    return ListTile(
-      title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text('${item.value}'),
-      ]),
-      //trailing: Icon(Icons.keyboard_arrow_right),
-      onTap: () {},
-      subtitle: Column(children: [Text('${item.expireDate.toLocal()}')]),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: listOfItems.length,
-      itemBuilder: (context, index) {
-        Item item = listOfItems[index];
-        return makeCard(item);
-      },
-    );
-  }
-}
-*/

@@ -43,7 +43,7 @@ class ListzAPI {
     }
   }
 
-  Future<bool> login(String username, String password) async {
+  Future<String> login(String username, String password) async {
     var url = '$SERVER_URL/login';
     var map = new Map<String, dynamic>();
     map['username'] = username;
@@ -52,10 +52,11 @@ class ListzAPI {
     var response = await http.post(url, body: map);
     if (response.statusCode == 200) {
       dynamic b = json.decode(response.body);
+      var token = b['token'];
       await storage.write(key: 'token', value: b['token']);
-      return true;
+      return token;
     } else if (response.statusCode == 401) {
-      return false;
+      return "";
     } else {
       throw ServerException();
     }
