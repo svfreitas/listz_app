@@ -15,8 +15,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late ListzBloc _listzBloc;
-  String? _listName;
-  String? _listDescription;
+  String? _name;
+  String? _description;
   final _formKey = GlobalKey<FormState>();
 
   int _currentIndex = 1;
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (value!.isEmpty) {
                           return 'Forneça o nome da lista';
                         }
-                        _listName = value;
+                        _name = value;
                         return null;
                       },
                       initialValue: '',
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         hintText: 'Descrição',
                       ),
                       validator: (value) {
-                        _listDescription = value;
+                        _description = value;
                         return null;
                       },
                       initialValue: '',
@@ -123,6 +123,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {}
                   Navigator.of(context).pop();
+                  ListzBloc listzBloc = context.read<ListzBloc>();
+                  listzBloc
+                      .add(CreateList(name: _name, description: _description));
                 },
                 child: Center(child: Text('Criar')),
               ),

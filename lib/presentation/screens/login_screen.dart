@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/bloc/login/login_bloc.dart';
-import 'listz_screen.dart';
 import 'signup_screen.dart';
 import 'home_screen.dart';
 

@@ -29,4 +29,9 @@ class ListzRepository implements Repository {
     bool? result = await listzAPI.signUp(username, password, email);
     return result!;
   }
+
+  Future<bool> createList(String? name, String? description) async {
+    bool? result = await listzAPI.createList(name, description);
+    return result!;
+  }
 }

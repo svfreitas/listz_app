@@ -27,8 +27,15 @@ class ListzBloc extends Bloc<ListzEvent, ListzState> {
       } on ServerException {
         yield ListzError("Couldn't fetch lists. Is the device online?");
       }
-    } else if (event is SetListzBuilt) {
-      yield ListzBuilt();
+    } else if (event is CreateList) {
+      try {
+        await _repository.createList(event.name, event.description);
+        yield ListzLoading();
+        final lists = await _repository.getLists();
+        yield ListzListsLoaded(lists);
+      } on ServerException {
+        yield ListzError("Não foi possivel criar a lista");
+      }
     }
   }
 }

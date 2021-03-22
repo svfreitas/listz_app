@@ -44,10 +44,7 @@ class _ListzListState extends State<Lists> {
           } else if (state is ListzLoading) {
             return buildLoading();
           } else if (state is ListzListsLoaded) {
-            _savedWidget = buildListView(context, state.lists);
-            return _savedWidget;
-          } else if (state is ListzBuilt) {
-            return _savedWidget;
+            return buildListView(context, state.lists);
           } else {
             return buildInitialInput();
           }
