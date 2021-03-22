@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:listz_app/presentation/screens/listz_screen.dart';
-import 'package:listz_app/presentation/screens/items_screen.dart';
-import 'package:listz_app/presentation/screens/login_screen.dart';
+import 'package:listz_app/presentation/screens/signup_screen.dart';
+import '../screens/listz_screen.dart';
+import '../screens/items_screen.dart';
+import '../screens/login_screen.dart';
+import '../screens/home_screen.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
@@ -12,6 +14,10 @@ class AppRouter {
     }
 
     switch (settings.name) {
+      case '/home':
+        return MaterialPageRoute(
+          builder: (_) => HomeScreen(),
+        );
       case '/listz':
         return MaterialPageRoute(
           builder: (_) => ListzScreen(),
@@ -23,6 +29,10 @@ class AppRouter {
       case '/items':
         return MaterialPageRoute(
           builder: (_) => ItemsScreen(args!.listName),
+        );
+      case '/signup':
+        return MaterialPageRoute(
+          builder: (_) => SignUpScreen(),
         );
       default:
         return null;

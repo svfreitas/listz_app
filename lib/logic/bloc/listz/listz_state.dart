@@ -24,6 +24,8 @@ class ListzListsLoaded extends ListzState {
   int get hashCode => lists.hashCode;
 }
 
+class ListzBuilt extends ListzState {}
+
 class ListzError extends ListzState {
   final String message;
   const ListzError(this.message);

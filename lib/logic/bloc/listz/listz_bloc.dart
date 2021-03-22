@@ -27,6 +27,8 @@ class ListzBloc extends Bloc<ListzEvent, ListzState> {
       } on ServerException {
         yield ListzError("Couldn't fetch lists. Is the device online?");
       }
+    } else if (event is SetListzBuilt) {
+      yield ListzBuilt();
     }
   }
 }

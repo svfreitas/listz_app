@@ -20,8 +20,6 @@ class ItemsScreen extends StatefulWidget {
 class _ItemsScreenState extends State<ItemsScreen> {
   @override
   Widget build(BuildContext context) {
-    // final bloc = BlocProvider.of<ItemsBloc>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Itens da lista"),
@@ -61,17 +59,10 @@ class _ItemsScreenState extends State<ItemsScreen> {
         currentIndex: 1,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              title: Text("Conta"), icon: Icon(Icons.account_box)),
+              label: "Conta", icon: Icon(Icons.account_box)),
+          BottomNavigationBarItem(label: "Listas", icon: Icon(Icons.apps)),
           BottomNavigationBarItem(
-              title: Text(
-                "Listas",
-              ),
-              icon: Icon(Icons.apps)),
-          BottomNavigationBarItem(
-              title: Text(
-                "Configuração",
-              ),
-              icon: Icon(Icons.settings)),
+              label: "Configuração", icon: Icon(Icons.settings)),
         ],
       ),
     );

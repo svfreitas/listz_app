@@ -4,3 +4,5 @@ part of 'listz_bloc.dart';
 abstract class ListzEvent {}
 
 class GetLists extends ListzEvent {}
+
+class SetListzBuilt extends ListzEvent {}

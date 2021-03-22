@@ -62,4 +62,27 @@ class ListzAPI {
       throw ServerException();
     }
   }
+
+  Future<bool?> signUp(
+      String? username, String? password, String? email) async {
+//TODO create user
+    var uri = Uri.http(ServerAddress, '/listz/_users');
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+    var map = new Map<String, dynamic>();
+    map['username'] = username;
+    map['password'] = password;
+    map['email'] = email;
+    //  map['profile'] = "0";
+
+    final response =
+        await http.post(uri, body: jsonEncode(map), headers: headers);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw ServerException();
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:listz_app/data/datasources/listzAPI.dart';
+import 'package:listz_app/data/datasources/listzAPI_Fake.dart';
 import 'package:listz_app/data/repositories/response_API.dart';
 import 'package:listz_app/data/models/item_model.dart';
 import 'package:listz_app/data/models/listz_model.dart';
@@ -22,5 +23,10 @@ class ListzRepository implements Repository {
   Future<String?> login(String? username, String? password) async {
     String? token = await listzAPI.login(username, password);
     return token;
+  }
+
+  Future<bool> signUp(String username, String password, String email) async {
+    bool? result = await listzAPI.signUp(username, password, email);
+    return result!;
   }
 }

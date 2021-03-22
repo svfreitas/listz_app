@@ -2,51 +2,35 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../logic/bloc/login/login_bloc.dart';
-import 'listz_screen.dart';
-import 'signup_screen.dart';
-import 'home_screen.dart';
+import 'package:listz_app/logic/bloc/signup/signup_bloc.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignUpScreen extends StatefulWidget {
+  static String routeName = "/signup";
+
   @override
-  LoginScreenState createState() {
-    return LoginScreenState();
+  SignUpScreenState createState() {
+    return SignUpScreenState();
   }
 }
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class LoginScreenState extends State<LoginScreen> {
+class SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? username;
-  String? password;
-  int _currentIndex = 0;
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+  String? username, password, email;
 
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Scaffold(
       appBar: AppBar(
-        title: Text("Entre com sua conta"),
+        title: Text("Crie  sua conta"),
         centerTitle: true,
       ),
-      body: BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
-        if (state is LoginSuccess) {
-          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-        } else if (state is LoginFailure) {
+      body: BlocConsumer<SignUpBloc, SignUpState>(listener: (context, state) {
+        if (state is SignUpSuccess) {
+          Navigator.pop(context);
+        } else if (state is SignUpFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error),
@@ -54,9 +38,9 @@ class LoginScreenState extends State<LoginScreen> {
           );
         }
       }, builder: (context, state) {
-        if (state is LoginInitial) {
+        if (state is SignUpInitial) {
           return buildForm(_formKey, context);
-        } else if (state is LoginLoading) {
+        } else if (state is SignUpLoading) {
           return buildLoading();
         } else {
           return buildForm(_formKey, context);
@@ -67,7 +51,7 @@ class LoginScreenState extends State<LoginScreen> {
 }
 
 Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
-  String? username, password;
+  String? t_username, t_password, t_email;
   return Form(
     key: _formKey,
     child: Container(
@@ -78,7 +62,7 @@ Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
         ),
       ),
       child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -92,7 +76,24 @@ Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
                     if (value!.isEmpty) {
                       return 'Forneça a conta';
                     }
-                    username = value;
+                    t_username = value;
+                    return null;
+                  },
+                  initialValue: '',
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.email),
+                    hintText: 'E-Mail',
+                  ),
+                  validator: (value) {
+                    t_email = value!;
+                    if (!RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(t_email!)) {
+                      return 'Forneça um email válido';
+                    }
+                    t_email = value;
                     return null;
                   },
                   initialValue: '',
@@ -106,14 +107,31 @@ Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
                     if (value!.isEmpty) {
                       return 'Forneça a senha';
                     }
-                    password = value;
+                    t_password = value;
+                    return null;
+                  },
+                  initialValue: '',
+                  obscureText: true,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'Repita a Senha',
+                    icon: Icon(Icons.security_rounded),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Entre com a senha novamente aqui';
+                    }
+                    if (t_password != value) {
+                      return 'Senhas não conferem';
+                    }
                     return null;
                   },
                   initialValue: '',
                   obscureText: true,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  padding: const EdgeInsets.symmetric(vertical: 30.0),
                   child: Column(
                     children: [
                       FlatButton(
@@ -122,21 +140,13 @@ Widget buildForm(GlobalKey<FormState> _formKey, BuildContext context) {
                             borderRadius: new BorderRadius.circular(30.0)),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            LoginBloc loginBloc = context.read<LoginBloc>();
-                            loginBloc.add(
-                                LogIn(username: username, password: password));
+                            //TODO criar o processo de signup no bloc
+                            SignUpBloc signUploc = context.read<SignUpBloc>();
+                            signUploc.add(SignUp(
+                                username: t_username!,
+                                password: t_password!,
+                                email: t_email!));
                           }
-                        },
-                        child: Center(child: Text('Entrar')),
-                      ),
-                      OutlineButton(
-                        color: Colors.transparent,
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
-                        onPressed: () async {
-                          Navigator.pushNamed(context, SignUpScreen.routeName);
                         },
                         child: Center(child: Text('Cadastrar')),
                       ),

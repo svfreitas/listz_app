@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:listz_app/logic/bloc/items/items_bloc.dart';
-import 'package:listz_app/logic/bloc/listz/listz_bloc.dart';
-import 'package:listz_app/data/models/listz_model.dart';
-import 'package:listz_app/presentation/screens/items_screen.dart';
+import '../../logic/bloc/items/items_bloc.dart';
+import '../../logic/bloc/listz/listz_bloc.dart';
+import '../../data/models/listz_model.dart';
+import 'items_screen.dart';
 
 class ListzScreen extends StatefulWidget {
   static String routeName = "/listz";
@@ -38,7 +38,7 @@ class _ListzScreenState extends State<ListzScreen> {
         child: BlocConsumer<ListzBloc, ListzState>(
           listener: (context, state) {
             if (state is ListzError) {
-              Scaffold.of(context).showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
                 ),

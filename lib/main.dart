@@ -6,6 +6,7 @@ import 'package:listz_app/presentation/routes/app_router.dart';
 import 'data/repositories/listz_repository.dart';
 import 'logic/bloc/items/items_bloc.dart';
 import 'logic/bloc/login/login_bloc.dart';
+import 'logic/bloc/signup/signup_bloc.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,6 +26,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<LoginBloc>(
             create: (context) => LoginBloc(_repository),
+          ),
+          BlocProvider<SignUpBloc>(
+            create: (context) => SignUpBloc(_repository),
           ),
         ],
         child: MaterialApp(

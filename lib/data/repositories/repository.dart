@@ -5,4 +5,5 @@ abstract class Repository {
   Future<List<ListZ>> getLists();
   Future<List<Item>> getListItems(String? listName);
   Future<String?> login(String? username, String? password);
+  Future<bool> signUp(String username, String password, String email);
 }
