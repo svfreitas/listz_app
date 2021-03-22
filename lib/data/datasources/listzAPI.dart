@@ -67,6 +67,7 @@ class ListzAPI {
       String? username, String? password, String? email) async {
 //TODO create user
     var uri = Uri.http(ServerAddress, '/listz/_users');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
@@ -80,6 +81,28 @@ class ListzAPI {
         await http.post(uri, body: jsonEncode(map), headers: headers);
 
     if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  Future<bool?> createList(String? name, String? description) async {
+//TODO create user
+    var uri = Uri.http(ServerAddress, '/restricted/listz');
+
+    Map<String, String> headers = await _createHeaders();
+
+    var map = new Map<String, dynamic>();
+    map['name'] = name;
+    map['description'] = description;
+    map['type'] = 0;
+    //  map['profile'] = "0";
+
+    final response =
+        await http.post(uri, body: jsonEncode(map), headers: headers);
+
+    if (response.statusCode == 201) {
       return true;
     } else {
       throw ServerException();
